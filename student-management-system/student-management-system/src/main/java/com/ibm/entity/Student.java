@@ -17,12 +17,6 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 //Unique column constraint
-@Table(
-	    name = "student",
-	    uniqueConstraints = {
-	        @UniqueConstraint(columnNames ={"mobile","email"})
-	    }
-	)
 public class Student {
 	//Primary key
 	@Id
@@ -36,7 +30,7 @@ public class Student {
 	//Unique 
 	@NotBlank(message = "Email is required!")
 	@Email(message = "Email must be valid")
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	//unique
@@ -44,6 +38,7 @@ public class Student {
 	@Pattern(
 			regexp = "^[0-9]{10}$", message = "Mobile number must contain 10 digits!"
 			)
+	@Column(nullable= false, unique= true)
 	private String mobile;
 	
 	@NotBlank(message = "Course is required!")
