@@ -2,7 +2,10 @@ package com.ibm.controller;
 
 import java.util.List;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ibm.dto.StudentDTO;
+import com.ibm.service.ExcelService;
 import com.ibm.service.StudentService;
 
 import jakarta.validation.Valid;
@@ -27,10 +31,12 @@ import jakarta.validation.Valid;
 public class StudentController {
 	//Student service bean to handle logic
 	StudentService service;
+	ExcelService excelService;
 
-	public StudentController(StudentService service) {
+	public StudentController(StudentService service, ExcelService excelService) {
 		super();
 		this.service = service;
+		this.excelService = excelService;
 	}
 	
 	
@@ -96,6 +102,62 @@ public class StudentController {
 	public ResponseEntity<List<StudentDTO>> getSortedStudentsByDate(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body( service.getSortedStudentsByDOJ());
+	}
+	
+	@GetMapping("/excel")
+	public ResponseEntity<InputStreamResource> getAllStudentsExcel(){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=students.xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(excelService.exportAllStudents());
+	}
+	
+	@GetMapping("/excel/name/{name}")
+	public ResponseEntity<InputStreamResource> getAllStudentsExcelByName(@PathVariable String name){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=students_with_name_"+name+".xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(excelService.exportAllStudentsByName(name));
+	}
+	
+	@GetMapping("/excel/course/{course}")
+	public ResponseEntity<InputStreamResource> getAllStudentsExcelByCourse(@PathVariable String course){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=students_with_course_"+course+".xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(excelService.exportAllStudentsByCourse(course));
+	}
+	
+	@GetMapping("/excel/sort/name")
+	public ResponseEntity<InputStreamResource> getAllSortedStudentsByNameExcel(){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=students_sorted_by_name.xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(excelService.exportAllSortedStudentsByName());
+	}
+	
+	
+	@GetMapping("/excel/sort/doj")
+	public ResponseEntity<InputStreamResource> getAllSortedStudentsByDojExcel(){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=students_sorted_by_doj.xlsx")
+                .contentType(MediaType.parseMediaType(
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(excelService.exportAllSortedStudentsByDoj());
 	}
 	
 }
