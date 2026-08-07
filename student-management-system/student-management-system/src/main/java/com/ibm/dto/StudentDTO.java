@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class StudentDTO {
 
+	//Dto object fields resembling student entity
 	private Long id;
 	private String name;
 	private String email;
@@ -15,7 +16,7 @@ public class StudentDTO {
 	private Date dateOfJoining;
 	
 	
-	
+	//constructor, setters and getters
 	
 	public StudentDTO() {
 		super();

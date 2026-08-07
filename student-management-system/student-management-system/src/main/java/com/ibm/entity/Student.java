@@ -1,24 +1,30 @@
 package com.ibm.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 
-import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
+//Unique column constraint
+@Table(
+	    name = "student",
+	    uniqueConstraints = {
+	        @UniqueConstraint(columnNames ={"mobile","email"})
+	    }
+	)
 public class Student {
-
+	//Primary key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -27,13 +33,13 @@ public class Student {
 	@Size(min = 1, max= 50, message = "Name must contain 1 to 50 characters")
 	private String name;
 	
-	
+	//Unique 
 	@NotBlank(message = "Email is required!")
 	@Email(message = "Email must be valid")
 	@Column(nullable = false)
 	private String email;
 	
-	
+	//unique
 	@NotBlank(message = "Mobile Number is required!")
 	@Pattern(
 			regexp = "^[0-9]{10}$", message = "Mobile number must contain 10 digits!"
@@ -53,7 +59,7 @@ public class Student {
 	private Date dateOfJoining;
 
 	
-	
+	//Constructors, getters and setters
 	
 	
 	public Student() {
