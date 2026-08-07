@@ -2,6 +2,8 @@ package com.ibm.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,57 +36,66 @@ public class StudentController {
 	
 	//Insert student
 	@PostMapping
-	public StudentDTO postStudent(@Valid @RequestBody StudentDTO dto) {
+	public ResponseEntity<StudentDTO> postStudent(@Valid @RequestBody StudentDTO dto) {
 
-		return service.postStudent(dto);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(service.postStudent(dto));
 	}
 	
 	//Reads all students
 	@GetMapping
-	public List<StudentDTO> getAllStudents(){
-		return service.getAllStudents();
+	public ResponseEntity<List<StudentDTO>> getAllStudents(){
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(service.getAllStudents());
 	}
 	
 	//Retrives student with perticular id
 	@GetMapping("/{id}")
-	public StudentDTO getStudentById(@PathVariable Long id) {
-		return service.getStudentById(id);
+	public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(service.getStudentById(id));
 	}
 
 	//Update existing student
 	@PutMapping("/{id}")
-	public StudentDTO putStudent(@Valid @RequestBody StudentDTO dto ,@PathVariable Long id) {
-		return service.updateStudent(dto, id);
+	public ResponseEntity<StudentDTO> putStudent(@Valid @RequestBody StudentDTO dto ,@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(service.updateStudent(dto, id));
 	}
 	
 	//Delete existing student
 	@DeleteMapping("/{id}")
-	public String deleteStudent(@PathVariable Long id) {
-		return service.deleteStudent(id);
+	public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+		return ResponseEntity.status(HttpStatus.NO_CONTENT)
+				.body(service.deleteStudent(id));
 	}
 	
 	//Retrives student with perticular name
 	@GetMapping("/search")
-	public List<StudentDTO> getStudentByName(@RequestParam String name) {
-		return service.getStudentsByName(name);
+	public ResponseEntity<List<StudentDTO>> getStudentByName(@RequestParam String name) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(service.getStudentsByName(name));
 	}
 	
 	//Retrives all students with mentioned course
 	@GetMapping("/course/{course}")
-	public List<StudentDTO> getStudentsByCourse(@PathVariable String course){
-		return service.getStudentsByCourse(course);
+	public ResponseEntity<List<StudentDTO>> getStudentsByCourse(@PathVariable String course){
+		return ResponseEntity.status(HttpStatus.OK)
+			   .body(service.getStudentsByCourse(course));
 	}
 	
 	//Retrives list of sorted students byname in ascending order
 	@GetMapping("/sort/name")
-	public List<StudentDTO> getSortedStudentsByName(){
-		return service.getSortedStudentsByName();
+	public ResponseEntity<List<StudentDTO>> getSortedStudentsByName(){
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(service.getSortedStudentsByName());
 	}
 	
 	//Retrives list pf sorted students by date of joining from oldest to latest(ascending)
 	@GetMapping("/sort/date")
-	public List<StudentDTO> getSortedStudentsByDate(){
-		return service.getSortedStudentsByDOJ();
+	public ResponseEntity<List<StudentDTO>> getSortedStudentsByDate(){
+		return ResponseEntity.status(HttpStatus.OK)
+				.body( service.getSortedStudentsByDOJ());
 	}
 	
 }
