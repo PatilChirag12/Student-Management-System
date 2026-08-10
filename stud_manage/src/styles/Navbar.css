@@ -1,29 +1,105 @@
-.navbar{
-    box-shadow : 0 2px 5px rgba(0, 0, 0, 0.2);
-}
  
-.navbar-brand {
-    font-size: 1.4rem;
-    font-weight: bold;
+/* =========================================
+   GENERAL APPLICATION
+========================================= */
+.app {
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
- 
-.nav-link{
-    color: white !important;
-    margin-left: 15px;
+
+/* =========================================
+   LIGHT MODE
+========================================= */
+.light-mode {
+    background-color: #ffffff;
+    color: #212529;
 }
- 
-.nav-link:hover{
-    color: #ffc107 !important;
+
+/* =========================================
+   DARK MODE
+========================================= */
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
 }
- 
-.nav-link.active{
-    color: #ffc1ff !important;
+
+/* =========================================
+   NAVBAR
+========================================= */
+.navbar {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
- 
-@media(max-width: 992px){
-    .nav-link{
+
+/* =========================================
+   DARK MODE - NAVBAR
+========================================= */
+.dark-mode .navbar-brand {
+    color: #ffffff;
+}
+.dark-mode .navbar-brand:hover {
+    color: #dddddd;
+}
+.dark-mode .nav-link {
+    color: #ffffff;
+}
+.dark-mode .nav-link:hover {
+    color: #cccccc;
+}
+
+/* =========================================
+   LIGHT MODE - NAVBAR
+========================================= */
+.light-mode .navbar-brand {
+    color: #212529;
+}
+.light-mode .nav-link {
+    color: #212529;
+}
+.light-mode .nav-link:hover {
+    color: #000000;
+}
+
+/* =========================================
+   DARK MODE TOGGLE BUTTON
+========================================= */
+.theme-toggle {
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Light mode button */
+.light-mode .theme-toggle {
+    background-color: #212529;
+    color: #ffffff;
+}
+
+/* Dark mode button */
+.dark-mode .theme-toggle {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+/* Hover */
+.theme-toggle:hover {
+    opacity: 0.8;
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+@media (max-width: 991px) {
+    .theme-toggle {
         margin-left: 0;
-        padding:10px 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .navbar-nav {
+        padding-top: 10px;
     }
 }
  

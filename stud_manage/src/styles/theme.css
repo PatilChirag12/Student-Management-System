@@ -1,0 +1,244 @@
+/* =========================
+   LIGHT THEME
+   ========================= */
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+
+/* =========================
+   DARK THEME
+   ========================= */
+
+body.dark-mode {
+    background-color: #212529;
+    color: #ffffff;
+}
+
+
+/* =========================
+   CARDS
+   ========================= */
+
+body.dark-mode .card {
+    background-color: #343a40;
+    color: #ffffff;
+    border-color: #495057;
+}
+
+body.dark-mode .card-header {
+    background-color: #343a40;
+    color: #ffffff;
+    border-color: #495057;
+}
+
+body.dark-mode .card-footer {
+    background-color: #343a40 !important;
+    color: #ffffff;
+    border-color: #495057;
+}
+
+
+/* =========================
+   TEXT
+   ========================= */
+
+body.dark-mode .text-muted {
+    color: #adb5bd !important;
+}
+
+
+/* =========================
+   TABLE FIX
+   ========================= */
+
+/*
+ * IMPORTANT:
+ * Bootstrap 5 tables use CSS variables.
+ * We must override them for dark mode.
+ */
+
+body.dark-mode .table {
+    --bs-table-bg: #343a40;
+    --bs-table-color: #ffffff;
+
+    --bs-table-border-color: #6c757d;
+
+    --bs-table-striped-bg: #3d4349;
+    --bs-table-striped-color: #ffffff;
+
+    --bs-table-hover-bg: #495057;
+    --bs-table-hover-color: #ffffff;
+
+    color: #ffffff;
+    background-color: #343a40;
+    border-color: #6c757d;
+}
+
+
+/* Table cells */
+
+body.dark-mode .table > :not(caption) > * > * {
+    background-color: transparent;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+
+/* Table body */
+
+body.dark-mode .table tbody {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+
+/* Table rows */
+
+body.dark-mode .table tbody tr {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+
+/* Hover */
+
+body.dark-mode .table-hover > tbody > tr:hover > * {
+    background-color: #495057;
+    color: #ffffff;
+}
+
+
+/* Striped */
+
+body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: #3d4349;
+    color: #ffffff;
+}
+
+
+/* Table header */
+
+body.dark-mode .table-dark {
+    --bs-table-bg: #212529;
+    --bs-table-color: #ffffff;
+
+    --bs-table-border-color: #495057;
+
+    background-color: #212529;
+    color: #ffffff;
+}
+
+
+/* =========================
+   FORM CONTROLS
+   ========================= */
+
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode textarea {
+    background-color: #495057;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #ced4da;
+}
+
+body.dark-mode .form-select option {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+
+/* =========================
+   INPUT GROUP
+   ========================= */
+
+body.dark-mode .input-group-text {
+    background-color: #495057;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+
+/* =========================
+   LIST GROUP
+   ========================= */
+
+body.dark-mode .list-group-item {
+    background-color: #343a40;
+    color: #ffffff;
+    border-color: #6c757d;
+}
+
+
+/* =========================
+   MODAL
+   ========================= */
+
+body.dark-mode .modal-content {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    border-color: #6c757d;
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
+
+
+/* =========================
+   BORDER
+   ========================= */
+
+body.dark-mode .border {
+    border-color: #6c757d !important;
+}
+
+
+/* =========================
+   BG LIGHT
+   ========================= */
+
+body.dark-mode .bg-light {
+    background-color: #343a40 !important;
+    color: #ffffff !important;
+}
+
+
+/* =========================
+   TRANSITIONS
+   ========================= */
+
+.card,
+.form-control,
+.form-select,
+.table,
+.modal-content {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+
+    .card-body {
+        padding: 1rem;
+    }
+
+}

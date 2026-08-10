@@ -46,15 +46,15 @@ function ViewStudent() {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-3 mt-md-5 px-3 px-md-4">
             <div className="row justify-content-center">
-                <div className="col-md-8">
+                <div className="col-12 col-sm-11 col-md-8">
                     <div className="card shadow">
                         <div className="card-header bg-primary text-white">
                             <h3 className="text-center mb-0">Student Details</h3>
                         </div>
 
-                        <div className="card-body">
+                        <div className="card-body p-3 p-md-4">
                             <p>
                                 <strong>ID :</strong> {student.id}
                             </p>
@@ -94,7 +94,7 @@ function ViewStudent() {
 
                         <div className="card-footer text-center">
                             <button
-                                className="btn btn-secondary"
+                                className="btn btn-secondary w-100 w-md-auto"
                                 onClick={() => navigate("/students")}
                             >
                                 ← Back to Student List
