@@ -13,6 +13,7 @@ function AddStudent() {
     course: "",
     address: "",
     gender: "",
+    dateOfJoining: ""
   });
 
   const [error, setError] = useState("");
@@ -38,6 +39,7 @@ function AddStudent() {
       course: "",
       address: "",
       gender: "",
+      dateOfJoining: ""
     });
 
     setError("");
@@ -52,7 +54,8 @@ function AddStudent() {
       student.mobile.trim() === "" ||
       student.course.trim() === "" ||
       student.address.trim() === "" ||
-      student.gender.trim() === ""
+      student.gender.trim() === "" ||
+      student.dateOfJoining.trim() === ""
     ) {
       setError("All fields are mandatory.");
       return;
@@ -91,7 +94,7 @@ function AddStudent() {
             <div className="card-header bg-primary text-white">
               <h2 className="text-center">
                 Add Student
-                </h2>
+              </h2>
             </div>
 
             <div className="card-body">
@@ -226,9 +229,33 @@ function AddStudent() {
                   </div>
                 </div>
 
+                <div className="mb-3">
+                  <label className="form-label">
+                    Date Of Joining
+                  </label>
+
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="dateOfJoining"
+                    value={student.dateOfJoining}
+                    onChange={handleChange}
+                  />
+                </div>
                 <div className="mt-4 text-center">
-                  <button type="submit" className="btn btn-success me-2">
-                    Save Student
+                  <button
+                    type="submit"
+                    className="btn btn-success me-2"
+                    disabled={
+                      !student.name ||
+                      !student.email ||
+                      !student.mobile ||
+                      !student.course ||
+                      !student.address ||
+                      !student.gender
+                    }
+                  >
+                    Save
                   </button>
 
                   <button
@@ -237,6 +264,14 @@ function AddStudent() {
                     onClick={resetForm}
                   >
                     Reset
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-danger ms-2"
+                    onClick={() => navigate("/students")}
+                  >
+                    Cancel
                   </button>
                 </div>
               </form>

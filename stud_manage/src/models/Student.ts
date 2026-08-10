@@ -6,4 +6,5 @@ export interface Student {
     course: string;
     address: string;
     gender: string;
+    dateOfJoining: string;
 }

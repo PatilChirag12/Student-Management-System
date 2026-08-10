@@ -13,7 +13,6 @@ public class StudentManagementSystemApplication {
 
 	}	
 	
-	
 	@Bean
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();

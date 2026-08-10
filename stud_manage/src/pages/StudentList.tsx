@@ -67,21 +67,25 @@ function StudentList() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const studentsPerPage = 10;
 
   const fetchStudents = useCallback(async () => {
     try {
-        const response = await getAllStudents();
-        setStudents(response.data);
+      const response = await getAllStudents();
+      setStudents(response.data);
     } catch {
-        setError("Failed to load students");
+      setError("Failed to load students");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-}, []);
+  }, []);
 
   useEffect(() => {
     fetchStudents();
-}, [fetchStudents]);
+  }, [fetchStudents]);
 
   const handleDelete = async (id: number) => {
     const confirmDelete = window.confirm(
@@ -99,6 +103,27 @@ function StudentList() {
     }
   };
 
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.course.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const indexOfLastStudent = currentPage * studentsPerPage;
+
+  const indexOfFirstStudent =
+    indexOfLastStudent - studentsPerPage;
+
+  const currentStudents =
+    filteredStudents.slice(
+      indexOfFirstStudent,
+      indexOfLastStudent
+    );
+
+  const totalPages = Math.ceil(
+    filteredStudents.length / studentsPerPage
+  );
+
   if (loading) {
     return <h2 className="text-center mt-5"> Loading </h2>;
   }
@@ -115,7 +140,27 @@ function StudentList() {
           + Add Student
         </Link>
       </div>
+      <div className="row mb-3">
 
+        <div className="col-md-6">
+
+          <input
+            type="text"
+            className="form-control"
+            placeholder="🔍 Search by Name, Email or Course..."
+            value={searchTerm}
+            onChange={(e) => {
+
+              setSearchTerm(e.target.value);
+
+              setCurrentPage(1);
+
+            }}
+          />
+
+        </div>
+
+      </div>
       <table className="table table-bordered table-hover">
         <thead className="table-dark">
           <tr>
@@ -124,18 +169,20 @@ function StudentList() {
             <th>Email</th>
             <th>Mobile</th>
             <th>Course</th>
+            <th>Date of Joining</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {students.length > 0 ? (
-            students.map((student) => (
+          {currentStudents.length > 0 ? (
+            currentStudents.map((student) => (
               <tr key={student.id}>
                 <td>{student.id}</td>
                 <td>{student.name}</td>
                 <td>{student.email}</td>
                 <td>{student.mobile}</td>
                 <td>{student.course}</td>
+                <td>{student.dateOfJoining}</td>
 
                 <td>
                   <Link
@@ -163,13 +210,79 @@ function StudentList() {
             ))
           ) : (
             <tr>
-              <td colSpan={6} className="text-center">
-                No Students Found.
+              <td colSpan={7} className="text-center">
+                No students match your search.
               </td>
             </tr>
           )}
         </tbody>
       </table>
+      <nav className="mt-4">
+
+        <ul className="pagination justify-content-center">
+
+          <li
+            className={`page-item ${currentPage === 1
+              ? "disabled"
+              : ""
+              }`}
+          >
+
+            <button
+              className="page-link"
+              onClick={() =>
+                setCurrentPage(currentPage - 1)
+              }
+            >
+              Previous
+            </button>
+
+          </li>
+
+          {[...Array(totalPages)].map((_, index) => (
+
+            <li
+              key={index}
+              className={`page-item ${currentPage === index + 1
+                ? "active"
+                : ""
+                }`}
+            >
+
+              <button
+                className="page-link"
+                onClick={() =>
+                  setCurrentPage(index + 1)
+                }
+              >
+                {index + 1}
+              </button>
+
+            </li>
+
+          ))}
+
+          <li
+            className={`page-item ${currentPage === totalPages
+              ? "disabled"
+              : ""
+              }`}
+          >
+
+            <button
+              className="page-link"
+              onClick={() =>
+                setCurrentPage(currentPage + 1)
+              }
+            >
+              Next
+            </button>
+
+          </li>
+
+        </ul>
+
+      </nav>
     </div>
   );
 }
