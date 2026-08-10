@@ -2,14 +2,10 @@ package com.ibm.controller;
 
 import java.util.List;
 
-<<<<<<< Updated upstream
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-=======
-import org.springframework.http.HttpStatus;
->>>>>>> Stashed changes
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -101,12 +97,11 @@ public class StudentController {
 				.body(service.getSortedStudentsByName());
 	}
 	
-	//Retrives list pf sorted students by date of joining from oldest to latest(ascending)
+	//Retrives list of sorted students by date of joining from oldest to latest(ascending)
 	@GetMapping("/sort/date")
 	public ResponseEntity<List<StudentDTO>> getSortedStudentsByDate(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body( service.getSortedStudentsByDOJ());
-<<<<<<< Updated upstream
 	}
 	
 	@GetMapping("/excel")
@@ -163,8 +158,6 @@ public class StudentController {
                 .contentType(MediaType.parseMediaType(
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(excelService.exportAllSortedStudentsByDoj());
-=======
->>>>>>> Stashed changes
 	}
 	
 }
