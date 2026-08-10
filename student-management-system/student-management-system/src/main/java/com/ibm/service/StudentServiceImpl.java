@@ -171,4 +171,8 @@ public class StudentServiceImpl implements StudentService{
 		
 		return dtoList;
 	}
+	
+	public List<Object[]> getStudentCountByCourse() {
+	    return repository.countStudentsByCourse();
+	}
 }

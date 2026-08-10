@@ -27,4 +27,6 @@ public interface StudentService {
 	
 	public List<StudentDTO> getSortedStudentsByDOJ();
 	
+	public List<Object[]> getStudentCountByCourse();
+	
 }

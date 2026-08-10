@@ -27,5 +27,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	
 	@Query("select s from Student s order by s.dateOfJoining ASC")
 	public List<Student> findAllSortedStudentsByDOJ();
+	
+	@Query("select s.course, count(s) FROM Student s group by s.course")
+	List<Object[]> countStudentsByCourse();
 
 }

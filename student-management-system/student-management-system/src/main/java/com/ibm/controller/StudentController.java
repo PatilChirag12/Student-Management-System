@@ -160,4 +160,11 @@ public class StudentController {
                 .body(excelService.exportAllSortedStudentsByDoj());
 	}
 	
+	@GetMapping("/course/count")
+	public ResponseEntity<List<Object[]>> getCourseCount(){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body( service.getStudentCountByCourse());
+	}
+	
 }
