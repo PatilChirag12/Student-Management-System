@@ -98,12 +98,10 @@ public class StudentController {
 				.body(service.getSortedStudentsByName());
 	}
 	
-	//Retrives list pf sorted students by date of joining from oldest to latest(ascending)
 	@GetMapping("/sort/date")
 	public ResponseEntity<List<StudentDTO>> getSortedStudentsByDate(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body( service.getSortedStudentsByDOJ());
-
 	}
 	
 	@GetMapping("/excel")
