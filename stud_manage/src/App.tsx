@@ -48,7 +48,6 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import StudentList from "./pages/StudentList";
@@ -92,13 +91,13 @@ function App() {
                     />
 
                     <Route
-                        path="/edit-student/:id"
-                        element={<EditStudent />}
+                        path="/view-student/:id"
+                        element={<ViewStudent />}
                     />
 
                     <Route
-                        path="/view-student/:id"
-                        element={<ViewStudent />}
+                        path="/edit-student/:id"
+                        element={<EditStudent />}
                     />
 
                     <Route

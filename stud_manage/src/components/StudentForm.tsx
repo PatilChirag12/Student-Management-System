@@ -13,6 +13,7 @@ interface StudentFormProps {
     onReset?: () => void;
     submitText: string;
     loading?: boolean;
+    isFormValid: boolean;
 }
 
 function StudentForm({
@@ -21,7 +22,8 @@ function StudentForm({
     onSubmit,
     onReset,
     submitText,
-    loading = false
+    loading = false,
+    isFormValid
 }: StudentFormProps) {
 
     return (
@@ -213,10 +215,57 @@ function StudentForm({
             {/* Buttons */}
             <div className="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-2">
 
-                <button
+                <span
+                    style={{
+                        cursor:
+                            loading || !isFormValid
+                                ? "not-allowed"
+                                : "pointer",
+                        display: "inline-block"
+                    }}
+                >
+                    <button
+                        type="submit"
+                        className="btn btn-success"
+                        disabled={loading || !isFormValid}
+                        style={{
+                            opacity:
+                                loading || !isFormValid
+                                    ? 0.65
+                                    : 1,
+                            pointerEvents:
+                                loading || !isFormValid
+                                    ? "none"
+                                    : "auto"
+                        }}
+                    >
+                        {loading ? (
+                            <>
+                                <span
+                                    className="spinner-border spinner-border-sm me-2"
+                                    aria-hidden="true"
+                                />
+                                Saving...
+                            </>
+                        ) : (
+                            `${submitText} Student`
+                        )}
+                    </button>
+                </span>
+                {/* <button
                     type="submit"
                     className="btn btn-success"
-                    disabled={loading}
+                    disabled={loading || !isFormValid}
+                    style={{
+                        cursor:
+                            loading || !isFormValid
+                                ? "not-allowed"
+                                : "pointer",
+                        opacity:
+                            loading || !isFormValid
+                                ? 0.65
+                                : 1
+                    }}
                 >
                     {loading ? (
                         <>
@@ -227,9 +276,9 @@ function StudentForm({
                             Saving...
                         </>
                     ) : (
-                        submitText
+                        `${submitText} Student`
                     )}
-                </button>
+                </button> */}
 
                 {onReset && (
                     <button

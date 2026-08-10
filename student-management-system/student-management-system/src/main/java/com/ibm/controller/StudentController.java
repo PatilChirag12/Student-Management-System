@@ -6,7 +6,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -159,6 +158,13 @@ public class StudentController {
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(excelService.exportAllSortedStudentsByDoj());
 
+	}
+	
+	@GetMapping("/course/count")
+	public ResponseEntity<List<Object[]>> getCourseCount(){
+		
+		return ResponseEntity.status(HttpStatus.OK)
+				.body( service.getStudentCountByCourse());
 	}
 	
 }

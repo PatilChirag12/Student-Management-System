@@ -117,7 +117,7 @@ function Navbar() {
 
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm sticky-top">
 
             <div className="container-fluid">
 

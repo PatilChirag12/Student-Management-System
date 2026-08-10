@@ -1,320 +1,10 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import type { Student } from "../models/Student";
-// import { createStudent } from "../services/StudentService";
-
-// function AddStudent() {
-//   const navigate = useNavigate();
-
-//   const [student, setStudent] = useState<Student>({
-//     name: "",
-//     email: "",
-//     mobile: "",
-//     course: "",
-//     address: "",
-//     gender: "",
-//     dateOfJoining: ""
-//   });
-
-//   const [error, setError] = useState("");
-
-//   const handleChange = (
-//     e: React.ChangeEvent<
-//       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-//     >,
-//   ) => {
-//     const { name, value } = e.target;
-
-//     setStudent({
-//       ...student,
-//       [name]: value,
-//     });
-//   };
-
-//   const resetForm = () => {
-//     setStudent({
-//       name: "",
-//       email: "",
-//       mobile: "",
-//       course: "",
-//       address: "",
-//       gender: "",
-//       dateOfJoining: ""
-//     });
-
-//     setError("");
-//   };
-
-//   const saveStudent = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     if (
-//       student.name.trim() === "" ||
-//       student.email.trim() === "" ||
-//       student.mobile.trim() === "" ||
-//       student.course.trim() === "" ||
-//       student.address.trim() === "" ||
-//       student.gender.trim() === "" ||
-//       student.dateOfJoining.trim() === ""
-//     ) {
-//       setError("All fields are mandatory.");
-//       return;
-//     }
-
-//     if (!/^\d{10}$/.test(student.mobile)) {
-//       setError("Mobile number should contain exactly 10 digits.");
-//       return;
-//     }
-
-//     if (!/\S+@\S+\.\S+/.test(student.email)) {
-//       setError("Please enter a valid email address.");
-//       return;
-//     }
-
-//     setError("");
-
-//     try {
-//       await createStudent(student);
-
-//       alert("Student Added Successfully.");
-
-//       navigate("/students");
-//     } catch (err) {
-//       console.error(err);
-//       setError("Unable to save student.");
-//     }
-//   };
-
-//   return (
-//     <div className="container mt-5">
-//       <div className="row justify-content-center">
-//         <div className="col-md-8 col-lg-6">
-//           <div className="card shadow">
-
-//             <div className="card-header bg-primary text-white">
-//               <h2 className="text-center mb-0 fs-4 fs-md-2">
-//                 Add Student
-//               </h2>
-//             </div>
-
-//             <div className="card-body p-3 p-md-4">
-//               {error && <div className="alert alert-danger">{error}</div>}
-
-//               <form onSubmit={saveStudent}>
-//                 {/* Name */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label">Name</label>
-
-//                   <input
-//                     type="text"
-//                     className="form-control"
-//                     name="name"
-//                     value={student.name}
-//                     onChange={handleChange}
-//                     placeholder="Enter Student Name"
-//                   />
-//                 </div>
-
-//                 {/* Email */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label">Email</label>
-
-//                   <input
-//                     type="email"
-//                     className="form-control"
-//                     name="email"
-//                     value={student.email}
-//                     onChange={handleChange}
-//                     placeholder="Enter Email Address"
-//                   />
-//                 </div>
-
-//                 {/* Mobile */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label">Mobile Number</label>
-
-//                   <input
-//                     type="text"
-//                     className="form-control"
-//                     name="mobile"
-//                     value={student.mobile}
-//                     onChange={handleChange}
-//                     placeholder="Enter Mobile Number"
-//                   />
-//                 </div>
-
-//                 {/* Course */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label">Course</label>
-
-//                   <select
-//                     className="form-select"
-//                     name="course"
-//                     value={student.course}
-//                     onChange={handleChange}
-//                   >
-//                     <option value="">Select Course</option>
-
-//                     <option value="Java">Java</option>
-
-//                     <option value="Spring Boot">Spring Boot</option>
-
-//                     <option value="React">React</option>
-
-//                     <option value="Python">Python</option>
-//                   </select>
-//                 </div>
-
-//                 {/* Address */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label">Address</label>
-
-//                   <textarea
-//                     className="form-control"
-//                     rows={3}
-//                     name="address"
-//                     value={student.address}
-//                     onChange={handleChange}
-//                     placeholder="Enter Address"
-//                   ></textarea>
-//                 </div>
-
-//                 {/* Gender */}
-
-//                 <div className="mb-3">
-//                   <label className="form-label d-block">Gender</label>
-
-//                   <div className="form-check form-check-inline">
-//                     <input
-//                       className="form-check-input"
-//                       type="radio"
-//                       name="gender"
-//                       value="Male"
-//                       checked={student.gender === "Male"}
-//                       onChange={handleChange}
-//                     />
-
-//                     <label className="form-check-label">Male</label>
-//                   </div>
-
-//                   <div className="form-check form-check-inline">
-//                     <input
-//                       className="form-check-input"
-//                       type="radio"
-//                       name="gender"
-//                       value="Female"
-//                       checked={student.gender === "Female"}
-//                       onChange={handleChange}
-//                     />
-
-//                     <label className="form-check-label">Female</label>
-//                   </div>
-
-//                   <div className="form-check form-check-inline">
-//                     <input
-//                       className="form-check-input"
-//                       type="radio"
-//                       name="gender"
-//                       value="Other"
-//                       checked={student.gender === "Other"}
-//                       onChange={handleChange}
-//                     />
-
-//                     <label className="form-check-label">Other</label>
-//                   </div>
-//                 </div>
-
-//                 <div className="mb-3">
-//                   <label className="form-label">
-//                     Date Of Joining
-//                   </label>
-
-//                   <input
-//                     type="date"
-//                     className="form-control"
-//                     name="dateOfJoining"
-//                     value={student.dateOfJoining}
-//                     onChange={handleChange}
-//                   />
-//                 </div>
-//                 <div className="mt-4 d-flex flex-column flex-sm-row justify-content-center gap-2">
-//                   <button
-
-//                     type="submit"
-
-//                     className="btn btn-success"
-
-//                     disabled={
-
-//                       !student.name ||
-
-//                       !student.email ||
-
-//                       !student.mobile ||
-
-//                       !student.course ||
-
-//                       !student.address ||
-
-//                       !student.gender
-
-//                     }
-//                   >
-
-//                     Save
-//                   </button>
-
-//                   <button
-
-//                     type="button"
-
-//                     className="btn btn-secondary"
-
-//                     onClick={resetForm}
-//                   >
-
-//                     Reset
-//                   </button>
-
-//                   <button
-
-//                     type="button"
-
-//                     className="btn btn-danger"
-
-//                     onClick={() => navigate("/students")}
-//                   >
-
-//                     Cancel
-//                   </button>
-//                 </div>
-
-//               </form>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default AddStudent;
-
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import StudentForm from "../components/StudentForm";
 import AlertMessage from "../components/AlertMessage";
 
-import {
-    createStudent
-} from "../services/StudentService";
+import { createStudent } from "../services/StudentService";
 
 import type { Student } from "../models/Student";
 
@@ -346,6 +36,11 @@ function AddStudent() {
     const [loading, setLoading] =
         useState(false);
 
+
+    // ==========================
+    // HANDLE INPUT CHANGE
+    // ==========================
+
     const handleChange = (
         e: React.ChangeEvent<
             HTMLInputElement |
@@ -367,16 +62,29 @@ function AddStudent() {
         setError("");
     };
 
+
+    // ==========================
+    // RESET FORM
+    // ==========================
+
     const resetForm = () => {
 
-        setStudent(initialStudent);
+        setStudent({
+            ...initialStudent
+        });
+
         setError("");
         setSuccess("");
-
     };
+
+
+    // ==========================
+    // VALIDATION
+    // ==========================
 
     const validate = (): boolean => {
 
+        // Required fields
         if (
             !student.name.trim() ||
             !student.email.trim() ||
@@ -394,6 +102,8 @@ function AddStudent() {
             return false;
         }
 
+
+        // Mobile validation
         if (
             !/^[0-9]{10}$/.test(
                 student.mobile
@@ -407,9 +117,12 @@ function AddStudent() {
             return false;
         }
 
+
+        // Email validation
         if (
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                .test(student.email)
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                student.email
+            )
         ) {
 
             setError(
@@ -419,14 +132,20 @@ function AddStudent() {
             return false;
         }
 
+
+        // Date validation
         const selectedDate =
             new Date(student.dateOfJoining);
 
         const today = new Date();
 
         today.setHours(
-            23, 59, 59, 999
+            23,
+            59,
+            59,
+            999
         );
+
 
         if (selectedDate > today) {
 
@@ -437,8 +156,35 @@ function AddStudent() {
             return false;
         }
 
+
         return true;
     };
+
+
+    // ==========================
+    // SAVE BUTTON STATE
+    // ==========================
+
+    const isFormValid =
+        student.name.trim() !== "" &&
+        student.email.trim() !== "" &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            student.email
+        ) &&
+        /^\d{10}$/.test(
+            student.mobile
+        ) &&
+        student.course.trim() !== "" &&
+        student.address.trim() !== "" &&
+        student.gender.trim() !== "" &&
+        student.dateOfJoining.trim() !== "" &&
+        new Date(student.dateOfJoining) <=
+            new Date();
+
+
+    // ==========================
+    // SAVE STUDENT
+    // ==========================
 
     const saveStudent = async (
         e: React.FormEvent
@@ -449,9 +195,11 @@ function AddStudent() {
         setError("");
         setSuccess("");
 
+
         if (!validate()) {
             return;
         }
+
 
         try {
 
@@ -463,14 +211,20 @@ function AddStudent() {
                 "Student added successfully."
             );
 
+
             setTimeout(() => {
+
                 navigate("/students");
+
             }, 1000);
+
 
         } catch (err: any) {
 
             console.error(err);
 
+
+            // Duplicate email/mobile
             if (
                 err.response?.status === 409
             ) {
@@ -480,7 +234,10 @@ function AddStudent() {
                     "Email or mobile number already exists."
                 );
 
-            } else if (
+            }
+
+            // Validation error
+            else if (
                 err.response?.status === 400
             ) {
 
@@ -494,20 +251,25 @@ function AddStudent() {
                         : "Please check the entered information."
                 );
 
-            } else {
+            }
+
+            else {
 
                 setError(
                     "Unable to save student. Please try again."
                 );
-
             }
 
         } finally {
 
             setLoading(false);
-
         }
     };
+
+
+    // ==========================
+    // JSX
+    // ==========================
 
     return (
 
@@ -527,9 +289,13 @@ function AddStudent() {
 
                         </div>
 
+
                         <div className="card-body p-3 p-md-4">
 
+
+                            {/* ERROR */}
                             {error && (
+
                                 <AlertMessage
                                     type="danger"
                                     message={error}
@@ -537,23 +303,35 @@ function AddStudent() {
                                         setError("")
                                     }
                                 />
+
                             )}
 
+
+                            {/* SUCCESS */}
                             {success && (
+
                                 <AlertMessage
                                     type="success"
                                     message={success}
                                 />
+
                             )}
+
+
+                            {/* STUDENT FORM */}
 
                             <StudentForm
                                 student={student}
                                 onChange={handleChange}
                                 onSubmit={saveStudent}
                                 onReset={resetForm}
-                                submitText="Save Student"
+                                submitText="Save"
                                 loading={loading}
+                                isFormValid={isFormValid}
                             />
+
+
+                            {/* CANCEL */}
 
                             <div className="text-center mt-3">
 

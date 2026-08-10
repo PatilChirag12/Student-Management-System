@@ -157,6 +157,11 @@ export const downloadStudentsSortedByNameExcel = () => {
     );
 };
 
+export const getStudentCountByCourse = () => {
+    return axios.get<Object[][]>(
+        "http://localhost:8080/students/course/count"
+    );
+};
 /*
  * Download students sorted by DOJ Excel
  */
