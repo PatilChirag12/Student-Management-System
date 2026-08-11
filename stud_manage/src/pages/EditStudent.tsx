@@ -21,6 +21,15 @@ const emptyStudent: StudentFormData = {
     dateOfJoining: ""
 };
 
+type FieldErrors = {
+    name?: string;
+    email?: string;
+    mobile?: string;
+    course?: string;
+    address?: string;
+    gender?: string;
+    dateOfJoining?: string;
+};
 function EditStudent() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -32,7 +41,8 @@ function EditStudent() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-
+    const [fieldErrors, setFieldErrors] =
+        useState<FieldErrors>({});
     // ==========================
     // FETCH STUDENT
     // ==========================
@@ -93,6 +103,7 @@ function EditStudent() {
             HTMLSelectElement
         >
     ) => {
+
         const { name, value } = e.target;
 
         setStudent((previous) => ({
@@ -100,149 +111,237 @@ function EditStudent() {
             [name]: value
         }));
 
+        // Remove error for the field being edited
+        setFieldErrors((previous) => ({
+            ...previous,
+            [name]: undefined
+        }));
+
         setError("");
         setSuccess("");
     };
-
     // ==========================
     // VALIDATION
     // ==========================
 
     const validate = (): boolean => {
-        // Required fields
-        if (
-            !student.name.trim() ||
-            !student.email.trim() ||
-            !student.mobile.trim() ||
-            !student.course.trim() ||
-            !student.address.trim() ||
-            !student.gender.trim() ||
-            !student.dateOfJoining.trim()
+
+        const errors: FieldErrors = {};
+
+        // NAME
+        if (!student.name.trim()) {
+
+            errors.name =
+                "Please enter student name.";
+
+        } else if (student.name.trim().length > 50) {
+
+            errors.name =
+                "Name must contain 1 to 50 characters.";
+
+        }
+
+
+        // EMAIL
+        if (!student.email.trim()) {
+
+            errors.email =
+                "Please enter an email address.";
+
+        } else if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                student.email.trim()
+            )
         ) {
-            setError("All fields are mandatory.");
-            return false;
+
+            errors.email =
+                "Please enter a valid email address.";
+
         }
 
-        // Name length
-        if (student.name.trim().length > 50) {
-            setError("Name must contain 1 to 50 characters.");
-            return false;
+
+        // MOBILE
+        if (!student.mobile.trim()) {
+
+            errors.mobile =
+                "Please enter a phone number.";
+
+        } else if (
+            !/^[0-9]{10}$/.test(
+                student.mobile.trim()
+            )
+        ) {
+
+            errors.mobile =
+                "Phone number must contain exactly 10 digits.";
+
         }
 
-        // Mobile
-        if (!/^[0-9]{10}$/.test(student.mobile)) {
-            setError("Mobile number should contain exactly 10 digits.");
-            return false;
+
+        // COURSE
+        if (!student.course.trim()) {
+
+            errors.course =
+                "Please select a course.";
+
         }
 
-        // Email
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(student.email)) {
-            setError("Please enter a valid email address.");
-            return false;
+
+        // ADDRESS
+        if (!student.address.trim()) {
+
+            errors.address =
+                "Please enter an address.";
+
         }
 
-        // Date
-        if (!student.dateOfJoining) {
-            setError("Date of joining is required.");
-            return false;
+
+        // GENDER
+        if (!student.gender.trim()) {
+
+            errors.gender =
+                "Please select a gender.";
+
         }
 
-        // Compare YYYY-MM-DD directly to avoid timezone problems
-        const today = new Date()
-            .toISOString()
-            .split("T")[0];
 
-        if (student.dateOfJoining > today) {
-            setError("Date of joining cannot be a future date.");
-            return false;
+        // DATE
+        if (!student.dateOfJoining.trim()) {
+
+            errors.dateOfJoining =
+                "Please select date of joining.";
+
+        } else {
+
+            const today =
+                new Date()
+                    .toISOString()
+                    .split("T")[0];
+
+            if (student.dateOfJoining > today) {
+
+                errors.dateOfJoining =
+                    "Date of joining cannot be a future date.";
+
+            }
         }
 
-        return true;
+
+        setFieldErrors(errors);
+
+        return Object.keys(errors).length === 0;
     };
-
-    // ==========================
-    // FORM VALID STATE
-    // ==========================
-
-    const today = new Date()
-        .toISOString()
-        .split("T")[0];
-
-    const isFormValid =
-        student.name.trim() !== "" &&
-        student.name.trim().length <= 50 &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(student.email) &&
-        /^[0-9]{10}$/.test(student.mobile) &&
-        student.course.trim() !== "" &&
-        student.address.trim() !== "" &&
-        student.gender.trim() !== "" &&
-        student.dateOfJoining.trim() !== "" &&
-        student.dateOfJoining <= today;
 
     // ==========================
     // UPDATE STUDENT
     // ==========================
 
-    const saveStudent = async (e: React.FormEvent) => {
+    const saveStudent = async (
+        e: React.FormEvent
+    ) => {
+
         e.preventDefault();
 
         setError("");
         setSuccess("");
 
+        // Frontend validation
         if (!validate()) {
-            return;
-        }
-
-        if (!id) {
-            setError("Student ID not found.");
-            return;
-        }
-
-        try {
-            setSaving(true);
-
-            await updateStudent(Number(id), student);
-
-            setSuccess("Student updated successfully.");
 
             setTimeout(() => {
+
+                const firstError =
+                    document.querySelector(".is-invalid");
+
+                firstError?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }, 50);
+
+            return;
+        }
+
+
+        if (!id) {
+
+            setError("Student ID not found.");
+
+            return;
+        }
+
+
+        try {
+
+            setSaving(true);
+
+            await updateStudent(
+                Number(id),
+                student
+            );
+
+            setSuccess(
+                "Student updated successfully."
+            );
+
+            setTimeout(() => {
+
                 navigate(`/view-student/${id}`);
+
             }, 1000);
+
         } catch (err: any) {
+
             console.error(err);
 
-            // Duplicate email/mobile
-            if (err.response?.status === 409) {
-                setError(
-                    err.response.data ||
-                    "Email or mobile number already exists."
-                );
-            }
+            const responseData =
+                err?.response?.data;
 
-            // Validation error
-            else if (err.response?.status === 400) {
-                const backendMessage = err.response.data;
 
-                setError(
-                    typeof backendMessage === "string"
-                        ? backendMessage
-                        : "Please check the entered information."
-                );
-            }
+            if (
+                typeof responseData === "string" &&
+                responseData.trim()
+            ) {
 
-            // Student not found
-            else if (err.response?.status === 404) {
+                setError(responseData);
+
+            } else if (
+                responseData?.message
+            ) {
+
+                setError(responseData.message);
+
+            } else if (
+                responseData?.error
+            ) {
+
+                setError(responseData.error);
+
+            } else if (
+                err?.response?.status === 404
+            ) {
+
                 setError("Student not found.");
-            }
 
-            // Other error
-            else {
+            } else {
+
                 setError(
                     "Unable to update student. Please try again."
                 );
             }
+
+
+            // Go to top where backend error is displayed
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
         } finally {
+
             setSaving(false);
+
         }
     };
 
@@ -251,8 +350,13 @@ function EditStudent() {
     // ==========================
 
     const resetForm = () => {
+
         fetchStudent();
+
+        setFieldErrors({});
+
         setError("");
+
         setSuccess("");
     };
 
@@ -301,7 +405,6 @@ function EditStudent() {
                                 />
                             )}
 
-                            {/* FORM */}
                             <StudentForm
                                 student={student}
                                 onChange={handleChange}
@@ -309,7 +412,7 @@ function EditStudent() {
                                 onReset={resetForm}
                                 submitText="Update"
                                 loading={saving}
-                                isFormValid={isFormValid}
+                                errors={fieldErrors}
                             />
 
                             {/* CANCEL */}
