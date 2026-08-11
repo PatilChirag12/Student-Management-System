@@ -88,6 +88,9 @@ function ViewStudent() {
                             {
                                 <p>
                                     <strong>Date Of Joining :</strong>     {new Date(student.dateOfJoining).toLocaleDateString("en-GB")}
+
+                                    <strong>Date Of Joining :</strong> {new Date(student.dateOfJoining).toLocaleDateString("en-GB")}
+
                                 </p>
                             }
                         </div>
