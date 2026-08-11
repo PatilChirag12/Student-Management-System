@@ -850,12 +850,12 @@ function StudentList() {
                                 }
                                 placeholder={
                                     searchType ===
-                                    "course"
+                                        "course"
 
                                         ? "Search by course..."
 
                                         : searchType ===
-                                          "name"
+                                            "name"
 
                                             ? "Search by name..."
 
@@ -883,9 +883,9 @@ function StudentList() {
                                 onChange={(e) =>
                                     handleSort(
                                         e.target.value as
-                                            | "none"
-                                            | "name"
-                                            | "date"
+                                        | "none"
+                                        | "name"
+                                        | "date"
                                     )
                                 }
                             >
@@ -1117,7 +1117,7 @@ function StudentList() {
 
 
                                 {currentStudents.length >
-                                0 ? (
+                                    0 ? (
 
                                     currentStudents.map(
                                         (student) => (
@@ -1177,11 +1177,11 @@ function StudentList() {
                                                 </td>
 
 
+
                                                 <td>
-                                                    {
-                                                        student.dateOfJoining
-                                                    }
+                                                    {new Date(student.dateOfJoining).toLocaleDateString("en-GB")}
                                                 </td>
+
 
 
                                                 <td>

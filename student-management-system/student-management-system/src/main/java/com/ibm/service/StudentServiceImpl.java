@@ -124,7 +124,7 @@ public class StudentServiceImpl implements StudentService{
 		return dtoList;
 	}
 
-	//retives all the students with same course
+	//retrieves all the students with same course
 	@Override
 	public List<StudentDTO> getStudentsByCourse(String course) {
 		List<StudentDTO> dtoList = new ArrayList<StudentDTO>();

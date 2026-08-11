@@ -26,7 +26,12 @@ interface CourseData {
     value: number;
     percentage: string;
 }
-
+const ALL_COURSES = [
+    "Java",
+    "Spring Boot",
+    "React",
+    "Python"
+];
 
 function Dashboard() {
 
@@ -110,73 +115,59 @@ function Dashboard() {
                     await getStudentCountByCourse();
 
 
-                const rawCourseData =
-                    courseResponse.data;
+                const rawCourseData = courseResponse.data;
 
+                // Create a complete list of courses.
+                // If backend does not return a course,
+                // its count will automatically be 0.
 
-                /*
-                 * Calculate total students
-                 * from course counts.
-                 */
+                const formattedCourseData = ALL_COURSES.map(
+                    (courseName) => {
 
+                        const foundCourse = rawCourseData.find(
+                            (item: Object[]) =>
+                                String(item[0]).toLowerCase() ===
+                                courseName.toLowerCase()
+                        );
+
+                        return {
+                            name: courseName,
+                            value: foundCourse
+                                ? Number(foundCourse[1])
+                                : 0,
+                            percentage: "0.0"
+                        };
+                    }
+                );
+
+                // Total students across all courses
                 const totalCourseStudents =
-                    rawCourseData.reduce(
-                        (
-                            total: number,
-                            item: Object[]
-                        ) => {
-
-                            return total +
-                                Number(item[1]);
-
-                        },
+                    formattedCourseData.reduce(
+                        (total, course) =>
+                            total + course.value,
                         0
                     );
 
+                // Calculate percentage
+                const finalCourseData =
+                    formattedCourseData.map(
+                        (course) => ({
 
-                /*
-                 * Convert backend response
-                 * into Recharts format.
-                 */
+                            ...course,
 
-                const formattedCourseData =
-                    rawCourseData.map(
-                        (item: Object[]) => {
-
-                            const name =
-                                String(item[0]);
-
-                            const value =
-                                Number(item[1]);
-
-
-                            const percentage =
+                            percentage:
                                 totalCourseStudents > 0
                                     ? (
-                                        (value /
+                                        (course.value /
                                             totalCourseStudents) *
                                         100
                                     ).toFixed(1)
-                                    : "0.0";
+                                    : "0.0"
 
-
-                            return {
-
-                                name,
-
-                                value,
-
-                                percentage
-
-                            };
-
-                        }
+                        })
                     );
 
-
-                setCourseData(
-                    formattedCourseData
-                );
+                setCourseData(finalCourseData);
 
 
             } catch (err) {
@@ -327,131 +318,87 @@ function Dashboard() {
                 TOP STATISTICS
             ========================== */}
 
-            <div className="row g-4 mb-4">
+            {/* ==========================
+    TOP STATISTICS
+========================== */}
 
+            <div className="row g-3 mb-4">
 
                 {/* TOTAL STUDENTS */}
-
-                <div className="col-12 col-sm-6 col-xl-3">
+                <div className="col-12 col-sm-6 col-lg">
 
                     <div className="card shadow-sm h-100 border-primary">
+                        <div className="card-body p-3">
 
-                        <div className="card-body">
-
-                            <div className="d-flex justify-content-between">
+                            <div className="d-flex justify-content-between align-items-center">
 
                                 <div>
-
-                                    <h6 className="text-muted">
+                                    <h6 className="text-muted mb-2">
                                         Total Students
                                     </h6>
 
-                                    <h2 className="fw-bold text-primary">
+                                    <h2 className="fw-bold text-primary mb-0">
                                         {totalStudents}
                                     </h2>
-
                                 </div>
 
-                                <div className="fs-1">
+                                <div className="fs-2">
                                     👨‍🎓
                                 </div>
 
                             </div>
 
                         </div>
-
                     </div>
 
                 </div>
 
 
-                {/* FIRST 3 COURSES */}
+                {/* COURSE CARDS */}
 
-                {courseData
-                    .slice(0, 3)
-                    .map(
-                        (course, index) => (
+                {courseData.map((course, index) => (
 
-                            <div
-                                className="col-12 col-sm-6 col-xl-3"
-                                key={course.name}
-                            >
-
-                                <div className="card shadow-sm h-100">
-
-                                    <div className="card-body">
-
-                                        <h6 className="text-muted">
-
-                                            {course.name}
-                                            {" "}Students
-
-                                        </h6>
-
-
-                                        <h2 className="fw-bold">
-
-                                            {course.value}
-
-                                        </h2>
-
-
-                                        <div className="progress">
-
-                                            <div
-                                                className="progress-bar"
-                                                role="progressbar"
-                                                style={{
-                                                    width:
-                                                        `${course.percentage}%`,
-                                                    backgroundColor:
-                                                        PIE_COLORS[
-                                                        (index + 1) %
-                                                        PIE_COLORS.length
-                                                        ]
-                                                }}
-                                            />
-
-                                        </div>
-
-
-                                        <small className="text-muted">
-
-                                            {course.percentage}%
-                                            {" "}of total students
-
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        )
-                    )}
-
-
-                {/* NO COURSE */}
-
-                {courseData.length === 0 && (
-
-                    <div className="col-12 col-sm-6 col-xl-3">
+                    <div
+                        className="col-12 col-sm-6 col-lg"
+                        key={course.name}
+                    >
 
                         <div className="card shadow-sm h-100">
 
-                            <div className="card-body">
+                            <div className="card-body p-3">
 
-                                <h6 className="text-muted">
-                                    Subjects
+                                <h6 className="text-muted mb-2">
+                                    {course.name} Students
                                 </h6>
 
-                                <h2 className="fw-bold">
-                                    0
+                                <h2 className="fw-bold mb-2">
+                                    {course.value}
                                 </h2>
 
+                                <div
+                                    className="progress mb-2"
+                                    style={{ height: "10px" }}
+                                >
+
+                                    <div
+                                        className="progress-bar"
+                                        role="progressbar"
+                                        style={{
+                                            width:
+                                                `${course.percentage}%`,
+
+                                            backgroundColor:
+                                                PIE_COLORS[
+                                                index %
+                                                PIE_COLORS.length
+                                                ]
+                                        }}
+                                    />
+
+                                </div>
+
                                 <small className="text-muted">
-                                    No subjects available
+                                    {course.percentage}% of total
                                 </small>
 
                             </div>
@@ -460,11 +407,9 @@ function Dashboard() {
 
                     </div>
 
-                )}
+                ))}
 
             </div>
-
-
             {/* ==========================
                 PIE CHART + STATISTICS
             ========================== */}
