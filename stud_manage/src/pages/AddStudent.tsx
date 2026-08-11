@@ -20,12 +20,25 @@ const initialStudent: StudentFormData = {
     dateOfJoining: ""
 };
 
+type FieldErrors = {
+    name?: string;
+    email?: string;
+    mobile?: string;
+    course?: string;
+    address?: string;
+    gender?: string;
+    dateOfJoining?: string;
+};
+
 function AddStudent() {
 
     const navigate = useNavigate();
 
     const [student, setStudent] =
         useState<StudentFormData>(initialStudent);
+
+    const [fieldErrors, setFieldErrors] =
+        useState<FieldErrors>({});
 
     const [error, setError] =
         useState("");
@@ -37,9 +50,9 @@ function AddStudent() {
         useState(false);
 
 
-    // ==========================
-    // HANDLE INPUT CHANGE
-    // ==========================
+    // ==========================================
+    // HANDLE CHANGE
+    // ==========================================
 
     const handleChange = (
         e: React.ChangeEvent<
@@ -59,13 +72,20 @@ function AddStudent() {
             [name]: value
         }));
 
+        // Remove field error when user starts correcting it
+        setFieldErrors((previous) => ({
+            ...previous,
+            [name]: undefined
+        }));
+
+        // Remove backend error
         setError("");
     };
 
 
-    // ==========================
-    // RESET FORM
-    // ==========================
+    // ==========================================
+    // RESET
+    // ==========================================
 
     const resetForm = () => {
 
@@ -73,118 +93,183 @@ function AddStudent() {
             ...initialStudent
         });
 
+        setFieldErrors({});
+
         setError("");
+
         setSuccess("");
     };
 
 
-    // ==========================
-    // VALIDATION
-    // ==========================
+    // ==========================================
+    // VALIDATE FORM
+    // ==========================================
 
     const validate = (): boolean => {
 
-        // Required fields
-        if (
-            !student.name.trim() ||
-            !student.email.trim() ||
-            !student.mobile.trim() ||
-            !student.course.trim() ||
-            !student.address.trim() ||
-            !student.gender.trim() ||
-            !student.dateOfJoining.trim()
-        ) {
+        const errors: FieldErrors = {};
 
-            setError(
-                "All fields are mandatory."
-            );
 
-            return false;
+        // NAME
+        if (!student.name.trim()) {
+
+            errors.name =
+                "Please enter student name.";
+
         }
 
 
-        // Mobile validation
-        if (
-            !/^[0-9]{10}$/.test(
-                student.mobile
-            )
-        ) {
+        // EMAIL
+        if (!student.email.trim()) {
 
-            setError(
-                "Mobile number should contain exactly 10 digits."
-            );
+            errors.email =
+                "Please enter an email address.";
 
-            return false;
-        }
-
-
-        // Email validation
-        if (
+        } else if (
             !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                student.email
+                student.email.trim()
             )
         ) {
 
-            setError(
-                "Please enter a valid email address."
-            );
+            errors.email =
+                "Please enter a valid email address.";
 
-            return false;
         }
 
 
-        // Date validation
-        const selectedDate =
-            new Date(student.dateOfJoining);
+        // MOBILE
+        if (!student.mobile.trim()) {
 
-        const today = new Date();
+            errors.mobile =
+                "Please enter a phone number.";
 
-        today.setHours(
-            23,
-            59,
-            59,
-            999
-        );
+        } else if (
+            !/^[0-9]{10}$/.test(
+                student.mobile.trim()
+            )
+        ) {
 
+            errors.mobile =
+                "Phone number must contain exactly 10 digits.";
 
-        if (selectedDate > today) {
-
-            setError(
-                "Date of joining cannot be a future date."
-            );
-
-            return false;
         }
 
 
-        return true;
+        // COURSE
+        if (!student.course.trim()) {
+
+            errors.course =
+                "Please select a course.";
+
+        }
+
+
+        // ADDRESS
+        if (!student.address.trim()) {
+
+            errors.address =
+                "Please enter an address.";
+
+        }
+
+
+        // GENDER
+        if (!student.gender.trim()) {
+
+            errors.gender =
+                "Please select a gender.";
+
+        }
+
+
+        // DATE
+        if (!student.dateOfJoining.trim()) {
+
+            errors.dateOfJoining =
+                "Please select date of joining.";
+
+        } else {
+
+            const selectedDate =
+                new Date(student.dateOfJoining);
+
+            const today = new Date();
+
+            today.setHours(
+                23,
+                59,
+                59,
+                999
+            );
+
+            if (selectedDate > today) {
+
+                errors.dateOfJoining =
+                    "Date of joining cannot be a future date.";
+
+            }
+        }
+
+
+        setFieldErrors(errors);
+
+        return Object.keys(errors).length === 0;
     };
 
 
-    // ==========================
-    // SAVE BUTTON STATE
-    // ==========================
+    // ==========================================
+    // EXTRACT BACKEND ERROR
+    // ==========================================
 
-    const isFormValid =
-        student.name.trim() !== "" &&
-        student.email.trim() !== "" &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-            student.email
-        ) &&
-        /^\d{10}$/.test(
-            student.mobile
-        ) &&
-        student.course.trim() !== "" &&
-        student.address.trim() !== "" &&
-        student.gender.trim() !== "" &&
-        student.dateOfJoining.trim() !== "" &&
-        new Date(student.dateOfJoining) <=
-            new Date();
+    const getBackendError = (err: any): string => {
+
+        const responseData =
+            err?.response?.data;
+
+        // String response
+        if (
+            typeof responseData === "string" &&
+            responseData.trim()
+        ) {
+
+            return responseData;
+        }
 
 
-    // ==========================
+        // Spring Boot JSON response
+        if (
+            responseData?.message
+        ) {
+
+            return responseData.message;
+        }
+
+
+        // Spring Boot error
+        if (
+            responseData?.error
+        ) {
+
+            return responseData.error;
+        }
+
+
+        // Axios error message
+        if (
+            err?.message
+        ) {
+
+            return err.message;
+        }
+
+
+        return "Unable to save student. Please try again.";
+    };
+
+
+    // ==========================================
     // SAVE STUDENT
-    // ==========================
+    // ==========================================
 
     const saveStudent = async (
         e: React.FormEvent
@@ -193,10 +278,28 @@ function AddStudent() {
         e.preventDefault();
 
         setError("");
+
         setSuccess("");
 
 
+        // Validate frontend
         if (!validate()) {
+
+            // Scroll to first error
+            setTimeout(() => {
+
+                const firstError =
+                    document.querySelector(
+                        ".is-invalid"
+                    );
+
+                firstError?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }, 50);
+
             return;
         }
 
@@ -206,6 +309,7 @@ function AddStudent() {
             setLoading(true);
 
             await createStudent(student);
+
 
             setSuccess(
                 "Student added successfully."
@@ -221,55 +325,39 @@ function AddStudent() {
 
         } catch (err: any) {
 
-            console.error(err);
+            console.error(
+                "Student save error:",
+                err
+            );
 
 
-            // Duplicate email/mobile
-            if (
-                err.response?.status === 409
-            ) {
+            // IMPORTANT:
+            // Backend/database errors appear
+            // at the TOP of the page.
 
-                setError(
-                    err.response.data ||
-                    "Email or mobile number already exists."
-                );
+            setError(
+                getBackendError(err)
+            );
 
-            }
 
-            // Validation error
-            else if (
-                err.response?.status === 400
-            ) {
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
-                const backendMessage =
-                    err.response.data;
-
-                setError(
-                    typeof backendMessage ===
-                    "string"
-                        ? backendMessage
-                        : "Please check the entered information."
-                );
-
-            }
-
-            else {
-
-                setError(
-                    "Unable to save student. Please try again."
-                );
-            }
 
         } finally {
 
             setLoading(false);
+
         }
     };
 
 
-    // ==========================
+    // ==========================================
     // JSX
-    // ==========================
+    // ==========================================
 
     return (
 
@@ -293,32 +381,44 @@ function AddStudent() {
                         <div className="card-body p-3 p-md-4">
 
 
-                            {/* ERROR */}
+                            {/* ==================================
+                                BACKEND / DATABASE ERROR
+                            ================================== */}
+
                             {error && (
 
-                                <AlertMessage
-                                    type="danger"
-                                    message={error}
-                                    onClose={() =>
-                                        setError("")
-                                    }
-                                />
+                                <div className="mb-4">
+
+                                    <AlertMessage
+                                        type="danger"
+                                        message={error}
+                                        onClose={() =>
+                                            setError("")
+                                        }
+                                    />
+
+                                </div>
 
                             )}
 
 
                             {/* SUCCESS */}
+
                             {success && (
 
-                                <AlertMessage
-                                    type="success"
-                                    message={success}
-                                />
+                                <div className="mb-4">
+
+                                    <AlertMessage
+                                        type="success"
+                                        message={success}
+                                    />
+
+                                </div>
 
                             )}
 
 
-                            {/* STUDENT FORM */}
+                            {/* FORM */}
 
                             <StudentForm
                                 student={student}
@@ -327,7 +427,7 @@ function AddStudent() {
                                 onReset={resetForm}
                                 submitText="Save"
                                 loading={loading}
-                                isFormValid={isFormValid}
+                                errors={fieldErrors}
                             />
 
 
