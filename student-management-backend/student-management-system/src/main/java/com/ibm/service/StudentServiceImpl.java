@@ -127,19 +127,22 @@ public class StudentServiceImpl implements StudentService{
 	//retrieves all the students with same course
 	@Override
 	public List<StudentDTO> getStudentsByCourse(String course) {
-		List<StudentDTO> dtoList = new ArrayList<StudentDTO>();
-		StudentDTO dto;
-		
-		repository.findByCourse(course)
-        .orElseThrow(() -> new StudentNotFoundException("No course with name "+course+" exists!"));
-		
-		
-		for (Student student : repository.findAllByCourse(course)) {
-			dto = mapper.map(student, StudentDTO.class);
-			dtoList.add(dto);
-		}
-		
-		return dtoList;
+	    List<Student> students = repository.findAllByCourse(course);
+
+	    if (students.isEmpty()) {
+	        throw new StudentNotFoundException(
+	            "No students found for course " + course
+	        );
+	    }
+
+	    List<StudentDTO> dtoList = new ArrayList<>();
+
+	    for (Student student : students) {
+	        StudentDTO dto = mapper.map(student, StudentDTO.class);
+	        dtoList.add(dto);
+	    }
+
+	    return dtoList;
 	}
 
 	//retrives all students in ascending order of their name
