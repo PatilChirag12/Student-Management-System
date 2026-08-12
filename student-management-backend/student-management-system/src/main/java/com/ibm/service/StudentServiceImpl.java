@@ -41,6 +41,14 @@ public class StudentServiceImpl implements StudentService{
 	        );
 	       }
 	    
+	    if (repository.existsByEmail(dto.getEmail())) {
+	        throw new InvalidStudentException("Email already exists");
+	    }
+
+	    if (repository.existsByMobile(dto.getMobile())) {
+	        throw new InvalidStudentException("Mobile number already exists");
+	    }
+	    
 		Student student = mapper.map(dto, Student.class);
 		student = repository.save(student);
 		return mapper.map(student, StudentDTO.class);
@@ -69,14 +77,6 @@ public class StudentServiceImpl implements StudentService{
 	            "Date of joining cannot be a future date"
 	        );
 	       }
-	    
-	    if (repository.existsByEmail(dto.getEmail())) {
-	        throw new InvalidStudentException("Email already exists");
-	    }
-
-	    if (repository.existsByMobile(dto.getMobile())) {
-	        throw new InvalidStudentException("Mobile number already exists");
-	    }
 	    
 			//Sets the student bean fields instead of making an identical student object by mapper
 			//This is to avoid identical object creation while updating
