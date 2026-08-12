@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "Student Management System API",
+    "_postman_id": "student-management-system-api",
+    "description": "Postman collection for Student Management REST APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "studentId",
+      "value": "1"
+    },
+    {
+      "key": "studentName",
+      "value": "Rahul Sharma"
+    },
+    {
+      "key": "course",
+      "value": "Java"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Student",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul.sharma@gmail.com\",\n  \"mobile\": \"9876543210\",\n  \"course\": \"Java\",\n  \"address\": \"Bangalore, Karnataka\",\n  \"gender\": \"Male\",\n  \"dateOfJoining\": \"2025-06-15\"\n}"
+        },
+        "url": "{{baseUrl}}/students"
+      }
+    },
+    {
+      "name": "Get All Students",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students"
+      }
+    },
+    {
+      "name": "Get Student By ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/{{studentId}}"
+      }
+    },
+    {
+      "name": "Update Student",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Rahul Sharma Updated\",\n  \"email\": \"rahul.updated@gmail.com\",\n  \"mobile\": \"9876543210\",\n  \"course\": \"Spring Boot\",\n  \"address\": \"Bangalore, Karnataka\",\n  \"gender\": \"Male\",\n  \"dateOfJoining\": \"2025-06-15\"\n}"
+        },
+        "url": "{{baseUrl}}/students/{{studentId}}"
+      }
+    },
+    {
+      "name": "Delete Student",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/students/{{studentId}}"
+      }
+    },
+    {
+      "name": "Search Students By Name",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/search?name={{studentName}}"
+      }
+    },
+    {
+      "name": "Get Students By Course",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/course/{{course}}"
+      }
+    },
+    {
+      "name": "Get Student Count By Course",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/course/count"
+      }
+    },
+    {
+      "name": "Sort Students By Name",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/sort/name"
+      }
+    },
+    {
+      "name": "Sort Students By Date",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/sort/date"
+      }
+    },
+    {
+      "name": "Export All Students to Excel",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/excel"
+      }
+    },
+    {
+      "name": "Export Students By Name",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/excel/name/{{studentName}}"
+      }
+    },
+    {
+      "name": "Export Students By Course",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/excel/course/{{course}}"
+      }
+    },
+    {
+      "name": "Export Students Sorted By Name",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/excel/sort/name"
+      }
+    },
+    {
+      "name": "Export Students Sorted By Date Of Joining",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/students/excel/sort/doj"
+      }
+    }
+  ]
+}
