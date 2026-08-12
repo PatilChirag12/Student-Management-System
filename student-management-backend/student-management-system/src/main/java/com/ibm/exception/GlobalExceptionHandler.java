@@ -74,4 +74,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body("Duplicate value already exists");
     }
+    
+  //Handles insertion or updation of duplicate unique fields
+	@ExceptionHandler(InvalidStudentException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidStudentException(InvalidStudentException ex,HttpServletRequest req){
+		ErrorResponse resp = new ErrorResponse(LocalDateTime.now(),
+				HttpStatus.NOT_FOUND.value(),
+				HttpStatus.NOT_FOUND.getReasonPhrase(),
+				ex.getMessage(),
+				req.getRequestURI());
+		return new ResponseEntity<ErrorResponse>(resp,HttpStatus.NOT_FOUND);
+	}
 }

@@ -30,5 +30,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	
 	@Query("select s.course, count(s) FROM Student s group by s.course")
 	List<Object[]> countStudentsByCourse();
+	
+	public Boolean existsByEmail(String email);
+
+	public Boolean existsByMobile(String mobile);
 
 }
