@@ -41,14 +41,6 @@ public class StudentServiceImpl implements StudentService{
 	        );
 	       }
 	    
-	    if (repository.existsByEmail(dto.getEmail())) {
-	        throw new InvalidStudentException("Email already exists");
-	    }
-
-	    if (repository.existsByMobile(dto.getMobile())) {
-	        throw new InvalidStudentException("Mobile number already exists");
-	    }
-	    
 		Student student = mapper.map(dto, Student.class);
 		student = repository.save(student);
 		return mapper.map(student, StudentDTO.class);
